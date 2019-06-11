@@ -17,6 +17,10 @@ Properly optimized blog can get your site higher in search results and lead more
 
 You can create unlimited attributes for post. It is extremely customized your blog by adding as many post attributes as you want to. It displays right in Post Edit and Frontend. No code modification required.
 
+## Post related product
+
+You can add unlimited related products for post. 
+
 ## Comments
 
 Better Blog supports 3 types of comments: built-in comment, Disqus comment (coming soon), and Facebook comment (coming soon). You can switch comment solution in configuration.
