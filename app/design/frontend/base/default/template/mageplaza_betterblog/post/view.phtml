@@ -67,6 +67,23 @@
             <?php echo $_post->getPostContent(); ?>
         </div>
 
+        <div class="post-products post-post_content">
+            <?php $relatedProducts = $_post->getSelectedProductsCollection(); ?>
+            <?php if ($relatedProducts): ?>
+                <h2><?php echo $this->__('Prodotti'); ?></h2>
+                <ul>
+                    <?php foreach ($relatedProducts as $_product): ?>
+                        <li>
+                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->__('Compra'); ?> <?php echo $_product->getName(); ?>">
+                                <img class="img-responsive" src="<?php echo $this->helper('catalog/image')->init($_product,'small_image')->resize(350); ?>" border="0" /> <br class="clear">
+                                <button type="button" title="<?php echo $this->__('Compra'); ?> <?php echo $_product->getName(); ?>" class="button btn-cart"><span><span><?php echo $this->__('Compra'); ?> <?php echo $_product->getName(); ?></span></span></button>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+
     </div>
 
 
