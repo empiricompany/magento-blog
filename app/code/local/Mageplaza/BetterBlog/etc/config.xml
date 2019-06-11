@@ -26,7 +26,7 @@
 <config>
     <modules>
         <Mageplaza_BetterBlog>
-            <version>1.0.4</version>
+            <version>1.2.0</version>
         </Mageplaza_BetterBlog>
     </modules>
     <global>
@@ -83,6 +83,12 @@
                     <tag_post>
                         <table>mageplaza_betterblog_post_tag</table>
                     </tag_post>
+                    <post_product>
+                        <table>mageplaza_betterblog_post_product</table>
+                    </post_product>
+                    <product_post>
+                        <table>mageplaza_betterblog_post_product</table>
+                    </product_post>
                     <post_comment>
                         <table>mageplaza_betterblog_post_comment</table>
                     </post_comment>
