@@ -138,6 +138,54 @@
             <block type="mageplaza_betterblog/adminhtml_tag_edit_tab_post" name="mageplaza_betterblog.tag.edit.tab.post"/>
         </block>
     </adminhtml_betterblog_tag_postsgrid>
+    <adminhtml_betterblog_post_products>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mageplaza_betterblog/adminhtml_post_edit_tab_product" name="mageplaza_betterblog.post.edit.tab.product"/>
+            <block type="adminhtml/widget_grid_serializer" name="product_grid_serializer">
+                <reference name="product_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>mageplaza_betterblog.post.edit.tab.product</grid_block_name>
+                            <data_callback>getSelectedProducts</data_callback>
+                            <hidden_input_name>products</hidden_input_name>
+                            <reload_param_name>post_products</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_betterblog_post_products>
+    <adminhtml_betterblog_post_productsgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mageplaza_betterblog/adminhtml_post_edit_tab_product" name="mageplaza_betterblog.post.edit.tab.product"/>
+        </block>
+    </adminhtml_betterblog_post_productsgrid>
+    
+    <adminhtml_betterblog_product_posts>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mageplaza_betterblog/adminhtml_product_edit_tab_post" name="mageplaza_betterblog.product.edit.tab.post"/>
+            <block type="adminhtml/widget_grid_serializer" name="post_grid_serializer">
+                <reference name="post_grid_serializer">
+                    <action method="initSerializerBlock">
+                        <grid_block_name>mageplaza_betterblog.product.edit.tab.post</grid_block_name>
+                            <data_callback>getSelectedPosts</data_callback>
+                            <hidden_input_name>posts</hidden_input_name>
+                            <reload_param_name>product_posts</reload_param_name>
+                    </action>
+                    <action method="addColumnInputName">
+                        <input_name>position</input_name>
+                    </action>
+                </reference>
+            </block>
+        </block>
+    </adminhtml_betterblog_product_posts>
+    <adminhtml_betterblog_product_postsgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="mageplaza_betterblog/adminhtml_product_edit_tab_post" name="mageplaza_betterblog.product.edit.tab.post"/>
+        </block>
+    </adminhtml_betterblog_product_postsgrid>
+
     <adminhtml_betterblog_category_edit>
         <update handle="editor"/>
         <reference name="left">
