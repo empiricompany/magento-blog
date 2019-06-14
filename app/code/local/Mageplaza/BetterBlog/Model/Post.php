@@ -17,7 +17,7 @@
 
 /**
  * Post model
- *
+ *getSelectedCategoriesCollection
  * @category    Mageplaza
  * @package     Mageplaza_BetterBlog
  * @author      Sam
@@ -188,7 +188,7 @@ class Mageplaza_BetterBlog_Model_Post extends Mage_Catalog_Model_Abstract
      */
     public function getSelectedCategoriesCollection()
     {
-        $collection = $this->getCategoryInstance()->getCategoriesCollection($this);
+        $collection = $this->getCategoryInstance()->getCategoriesCollection($this)->addFilter('status', 1);
         return $collection;
     }
 
