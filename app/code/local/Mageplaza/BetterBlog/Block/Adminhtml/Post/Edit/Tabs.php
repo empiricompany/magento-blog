@@ -108,6 +108,14 @@ class Mageplaza_BetterBlog_Block_Adminhtml_Post_Edit_Tabs extends Mage_Adminhtml
                 'class' => 'ajax'
             )
         );
+        $this->addTab(
+            'products',
+            array(
+                'label' => Mage::helper('mageplaza_betterblog')->__('Products'),
+                'url'   => $this->getUrl('*/*/products', array('_current' => true)),
+                'class' => 'ajax'
+            )
+        );
         return parent::_beforeToHtml();
     }
 
