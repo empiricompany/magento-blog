@@ -17,7 +17,7 @@
 
 /**
  * Post model
- *getSelectedCategoriesCollection
+ *
  * @category    Mageplaza
  * @package     Mageplaza_BetterBlog
  * @author      Sam
@@ -46,6 +46,7 @@ class Mageplaza_BetterBlog_Model_Post extends Mage_Catalog_Model_Abstract
     protected $_eventObject = 'post';
     protected $_categoryInstance = null;
     protected $_tagInstance = null;
+    protected $_productInstance = null;
 
     /**
      * constructor
@@ -142,6 +143,7 @@ class Mageplaza_BetterBlog_Model_Post extends Mage_Catalog_Model_Abstract
     {
         $this->getCategoryInstance()->savePostRelation($this);
         $this->getTagInstance()->savePostRelation($this);
+        $this->getProductInstance()->savePostRelation($this);
         return parent::_afterSave();
     }
 
@@ -188,7 +190,7 @@ class Mageplaza_BetterBlog_Model_Post extends Mage_Catalog_Model_Abstract
      */
     public function getSelectedCategoriesCollection()
     {
-        $collection = $this->getCategoryInstance()->getCategoriesCollection($this)->addFilter('status', 1);
+        $collection = $this->getCategoryInstance()->getCategoriesCollection($this);
         return $collection;
     }
 
@@ -236,6 +238,53 @@ class Mageplaza_BetterBlog_Model_Post extends Mage_Catalog_Model_Abstract
     public function getSelectedTagsCollection()
     {
         $collection = $this->getTagInstance()->getTagsCollection($this);
+        return $collection;
+    }
+
+    /**
+     * get product relation model
+     *
+     * @access public
+     * @return Mageplaza_BetterBlog_Model_Post_Product
+     * @author Sam
+     */
+    public function getProductInstance()
+    {
+        if (!$this->_productInstance) {
+            $this->_productInstance = Mage::getSingleton('mageplaza_betterblog/post_product');
+        }
+        return $this->_productInstance;
+    }
+
+    /**
+     * get selected  array
+     *
+     * @access public
+     * @return array
+     * @author Sam
+     */
+    public function getSelectedProducts()
+    {
+        if (!$this->hasSelectedProducts()) {
+            $products = array();
+            foreach ($this->getSelectedProductsCollection() as $product) {
+                $products[] = $product;
+            }
+            $this->setSelectedProducts($products);
+        }
+        return $this->getData('selected_products');
+    }
+
+    /**
+     * Retrieve collection selected
+     *
+     * @access public
+     * @return Mageplaza_BetterBlog_Model_Post_Tag_Collection
+     * @author Sam
+     */
+    public function getSelectedProductsCollection()
+    {
+        $collection = $this->getProductInstance()->getProductsCollection($this);
         return $collection;
     }
 

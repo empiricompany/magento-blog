@@ -25,6 +25,7 @@ class Mageplaza_BetterBlog_Model_Resource_Post extends Mage_Catalog_Model_Resour
 {
     protected $_postCategoryTable = null;
     protected $_postTagTable = null;
+    protected $_postProductTable = null;
 
 
     /**
@@ -43,6 +44,7 @@ class Mageplaza_BetterBlog_Model_Resource_Post extends Mage_Catalog_Model_Resour
             );
         $this->_postCategoryTable = $this->getTable('mageplaza_betterblog/post_category');
         $this->_postTagTable = $this->getTable('mageplaza_betterblog/post_tag');
+        $this->_postProductTable = $this->getTable('mageplaza_betterblog/post_product');
 
     }
 

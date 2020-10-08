@@ -159,6 +159,10 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_PostController extends Mage_Admi
                 $tags = Mage::helper('adminhtml/js')->decodeGridSerializedInput($data['tags']);
                 $post->setTagsData($tags);
             }
+            if (isset($data['products'])) {
+                $products = Mage::helper('adminhtml/js')->decodeGridSerializedInput($data['products']);
+                $post->setProductsData($products);
+            }
                 $categories = $this->getRequest()->getPost('category_ids', -1);
                 if ($categories != -1) {
                     $categories = explode(',', $categories);
@@ -422,6 +426,38 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_PostController extends Mage_Admi
         $this->loadLayout();
         $this->getLayout()->getBlock('mageplaza_betterblog.post.edit.tab.tag')
             ->setPostTags($this->getRequest()->getPost('tags', null));
+        $this->renderLayout();
+    }
+
+    /**
+     *  on the current post
+     *
+     * @access public
+     * @return void
+     * @author Sam
+     */
+    public function productsAction()
+    {
+        $this->_initPost();
+        $this->loadLayout();
+        $this->getLayout()->getBlock('mageplaza_betterblog.post.edit.tab.product')
+            ->setPostProducts($this->getRequest()->getPost('products', null));
+        $this->renderLayout();
+    }
+
+    /**
+     *  on the current post
+     *
+     * @access public
+     * @return void
+     * @author Sam
+     */
+    public function productsGridAction()
+    {
+        $this->_initPost();
+        $this->loadLayout();
+        $this->getLayout()->getBlock('mageplaza_betterblog.post.edit.tab.product')
+            ->setPostProducts($this->getRequest()->getPost('products', null));
         $this->renderLayout();
     }
     /**
