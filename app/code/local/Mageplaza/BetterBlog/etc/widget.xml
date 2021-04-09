@@ -179,4 +179,39 @@
             </recursion>
         </parameters>
     </betterblog_category_subtree>
+    <betterblog_category_posts type="mageplaza_betterblog/category_widget_posts" translate="name description" module="mageplaza_betterblog">
+        <name>Category posts</name>
+        <description>Category posts widget</description>
+        <is_email_compatible>0</is_email_compatible>
+        <parameters>
+            <category_id type="complex" translate="label">
+                <visible>1</visible>
+                <required>1</required>
+                <label>Category</label>
+                <type>label</type>
+                <helper_block>
+                    <type>mageplaza_betterblog/adminhtml_category_widget_chooser</type>
+                    <data>
+                        <button translate="open">
+                            <open>Select Category</open>
+                        </button>
+                    </data>
+                </helper_block>
+                <sort_order>10</sort_order>
+            </category_id>
+            <recursion type="complex" translate="label">
+                <visible>1</visible>
+                <required>1</required>
+                <value>0</value>
+                <label>Levels to show (0 for all)</label>
+                <type>text</type>
+                <sort_order>20</sort_order>
+            </recursion>
+        </parameters>
+    </betterblog_category_posts>
+    <betterblog_product_related type="mageplaza_betterblog/product_widget_related" translate="name description" module="mageplaza_betterblog">
+        <name>Current Product Related posts</name>
+        <description>Current Product Related posts widget</description>
+        <is_email_compatible>0</is_email_compatible>
+    </betterblog_product_related>
 </widgets>
