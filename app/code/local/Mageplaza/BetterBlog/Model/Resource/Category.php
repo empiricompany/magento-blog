@@ -133,7 +133,7 @@ class Mageplaza_BetterBlog_Model_Resource_Category extends Mage_Core_Model_Resou
         $parentIds = $object->getParentIds();
         if ($parentIds) {
             $childDecrease = $object->getChildrenCount() + 1; // +1 is itself
-            $data = array('children_count' => new Zend_Db_Expr('children_count - ' . $childDecrease));
+            $data = array('children_count' => new Zend_Db_Expr('CASE WHEN children_count >= ' . $childDecrease . ' THEN children_count - ' . $childDecrease . ' ELSE 0 END'));
             $where = array('entity_id IN(?)' => $parentIds);
             $this->_getWriteAdapter()->update($this->getMainTable(), $data, $where);
         }
@@ -565,7 +565,7 @@ class Mageplaza_BetterBlog_Model_Resource_Category extends Mage_Core_Model_Resou
          */
         $adapter->update(
             $table,
-            array('children_count' => new Zend_Db_Expr('children_count - ' . $childrenCount)),
+            array('children_count' => new Zend_Db_Expr('CASE WHEN children_count >= ' . $childrenCount . ' THEN children_count - ' . $childrenCount . ' ELSE 0 END')),
             array('entity_id IN(?)' => $category->getParentIds())
         );
         /**
