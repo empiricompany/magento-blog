@@ -222,7 +222,7 @@ $table = $this->getConnection()
     ->newTable($this->getTable('mageplaza_betterblog/category_store'))
     ->addColumn(
         'category_id',
-        Varien_Db_Ddl_Table::TYPE_SMALLINT,
+        Varien_Db_Ddl_Table::TYPE_INTEGER,
         null,
         array(
             'nullable' => false,
@@ -280,7 +280,7 @@ $table = $this->getConnection()
     ->newTable($this->getTable('mageplaza_betterblog/tag_store'))
     ->addColumn(
         'tag_id',
-        Varien_Db_Ddl_Table::TYPE_SMALLINT,
+        Varien_Db_Ddl_Table::TYPE_INTEGER,
         null,
         array(
             'nullable' => false,
@@ -701,7 +701,7 @@ $table = $this->getConnection()
     ->newTable($this->getTable('mageplaza_betterblog/post_comment_store'))
     ->addColumn(
         'comment_id',
-        Varien_Db_Ddl_Table::TYPE_SMALLINT,
+        Varien_Db_Ddl_Table::TYPE_INTEGER,
         null,
         array(
             'nullable' => false,
