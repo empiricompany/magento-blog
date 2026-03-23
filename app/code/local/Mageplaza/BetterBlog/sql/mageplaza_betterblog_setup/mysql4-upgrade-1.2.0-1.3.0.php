@@ -3,51 +3,11 @@
  * Mageplaza_BetterBlog extension
  *
  * Upgrade script 1.2.0 -> 1.3.0
- * - Fix FK type mismatch (SMALLINT -> INTEGER)
  * - Add missing indexes on category, tag, comment tables
  * - Add missing index on post_product.entity_id
  * - Add missing foreign keys (eav_attribute, category.parent_id)
  */
 $this->startSetup();
-
-// Fix type mismatch: category_store.category_id SMALLINT -> INTEGER
-$this->getConnection()->changeColumn(
-    $this->getTable('mageplaza_betterblog/category_store'),
-    'category_id', 'category_id',
-    array(
-        'type'     => Varien_Db_Ddl_Table::TYPE_INTEGER,
-        'unsigned' => true,
-        'nullable' => false,
-        'default'  => 0,
-        'comment'  => 'Category ID',
-    )
-);
-
-// Fix type mismatch: tag_store.tag_id SMALLINT -> INTEGER
-$this->getConnection()->changeColumn(
-    $this->getTable('mageplaza_betterblog/tag_store'),
-    'tag_id', 'tag_id',
-    array(
-        'type'     => Varien_Db_Ddl_Table::TYPE_INTEGER,
-        'unsigned' => true,
-        'nullable' => false,
-        'default'  => 0,
-        'comment'  => 'Tag ID',
-    )
-);
-
-// Fix type mismatch: post_comment_store.comment_id SMALLINT -> INTEGER
-$this->getConnection()->changeColumn(
-    $this->getTable('mageplaza_betterblog/post_comment_store'),
-    'comment_id', 'comment_id',
-    array(
-        'type'     => Varien_Db_Ddl_Table::TYPE_INTEGER,
-        'unsigned' => true,
-        'nullable' => false,
-        'default'  => 0,
-        'comment'  => 'Comment ID',
-    )
-);
 
 // Add indexes on category table
 $categoryTable = $this->getTable('mageplaza_betterblog/category');
