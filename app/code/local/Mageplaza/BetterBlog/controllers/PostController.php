@@ -163,6 +163,57 @@ class Mageplaza_BetterBlog_PostController extends Mage_Core_Controller_Front_Act
             }
             $headBlock->setKeywords($post->getMetaKeywords());
             $headBlock->setDescription($post->getMetaDescription());
+
+            // Add JSON-LD Schema.org Article markup
+            $storeId = Mage::app()->getStore()->getId();
+            $baseUrl = Mage::app()->getStore($storeId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
+
+            $imageUrl = '';
+            if ($post->getImage()) {
+                $imageHelper = Mage::helper('mageplaza_betterblog/post_image');
+                $imageUrl = (string) $imageHelper->init($post, 'image');
+                if (strpos($imageUrl, 'http') !== 0) {
+                    $imageUrl = rtrim($baseUrl, '/') . '/' . ltrim($imageUrl, '/');
+                }
+            }
+
+            $authorName = 'Admin';
+            if ($post->getAuthorId()) {
+                $customer = Mage::getModel('customer/customer')->load($post->getAuthorId());
+                if ($customer && $customer->getName()) {
+                    $authorName = $customer->getName();
+                }
+            }
+
+            $schema = [
+                '@context' => 'https://schema.org',
+                '@type' => 'Article',
+                'headline' => $post->getPostTitle(),
+                'description' => $post->getMetaDescription() ?: strip_tags($post->getPostExcerpt()),
+                'datePublished' => date('c', strtotime($post->getCreatedAt())),
+                'dateModified' => date('c', strtotime($post->getUpdatedAt() ?: $post->getCreatedAt())),
+                'author' => [
+                    '@type' => 'Person',
+                    'name' => $authorName,
+                ],
+                'url' => $post->getPostUrl(),
+            ];
+
+            if ($imageUrl) {
+                $schema['image'] = ['@type' => 'ImageObject', 'url' => $imageUrl];
+            }
+
+            $schema['publisher'] = [
+                '@type' => 'Organization',
+                'name' => Mage::app()->getStore()->getFrontendName(),
+            ];
+
+            $jsonLd = '<script type="application/ld+json">' . json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>';
+
+            $jsonLdBlock = $this->getLayout()->createBlock('core/text')
+                ->setName('mageplaza_json_ld')
+                ->setText($jsonLd);
+            $headBlock->append($jsonLdBlock);
         }
         $this->renderLayout();
     }
