@@ -132,7 +132,7 @@ class Mageplaza_BetterBlog_Block_Category_List extends Mage_Core_Block_Template
             }
         }
         $html .= '<li>';
-        $html .= '<a href="'.$category->getCategoryUrl().'">'.$category->getName().'</a>';
+        $html .= '<a href="'.$this->escapeUrl($category->getCategoryUrl()).'">'.$this->escapeHtml($category->getName()).'</a>';
         if (count($activeChildren) > 0) {
             $html .= '<ul>';
             foreach ($children as $child) {

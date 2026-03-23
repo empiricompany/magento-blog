@@ -340,6 +340,7 @@ class Mageplaza_BetterBlog_Model_Resource_Setup extends Mage_Catalog_Model_Resou
             $model->setData($data);
             $model->save();
         } catch (Exception $e) {
+            Mage::logException($e);
         }
     }
 
@@ -374,6 +375,7 @@ class Mageplaza_BetterBlog_Model_Resource_Setup extends Mage_Catalog_Model_Resou
                 ->setStoreId(0)
                 ->save();
         } catch (Exception $e) {
+            Mage::logException($e);
         }
 
         try {
@@ -390,6 +392,7 @@ class Mageplaza_BetterBlog_Model_Resource_Setup extends Mage_Catalog_Model_Resou
                 ->setStatus(1)
                 ->save();
         } catch (Exception $e) {
+            Mage::logException($e);
         }
 
 
@@ -448,6 +451,7 @@ class Mageplaza_BetterBlog_Model_Resource_Setup extends Mage_Catalog_Model_Resou
                 ->setIsActive(true)
                 ->save();
         } catch (Exception $e) {
+            Mage::logException($e);
         }
 
     }

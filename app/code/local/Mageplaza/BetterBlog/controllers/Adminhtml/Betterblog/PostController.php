@@ -145,9 +145,9 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_PostController extends Mage_Admi
      */
     public function saveAction()
     {
-        $storeId        = $this->getRequest()->getParam('store');
+        $storeId        = (int)$this->getRequest()->getParam('store');
         $redirectBack   = $this->getRequest()->getParam('back', false);
-        $postId   = $this->getRequest()->getParam('id');
+        $postId   = (int)$this->getRequest()->getParam('id');
         $isEdit         = (int)($this->getRequest()->getParam('id') != null);
         $data = $this->getRequest()->getPost();
         if ($data) {
@@ -216,7 +216,7 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_PostController extends Mage_Admi
      */
     public function deleteAction()
     {
-        if ($id = $this->getRequest()->getParam('id')) {
+        if ($id = (int)$this->getRequest()->getParam('id')) {
             $post = Mage::getModel('mageplaza_betterblog/post')->load($id);
             try {
                 $post->delete();
@@ -247,7 +247,7 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_PostController extends Mage_Admi
         } else {
             try {
                 foreach ($postIds as $postId) {
-                    $post = Mage::getSingleton('mageplaza_betterblog/post')->load($postId);
+                    $post = Mage::getModel('mageplaza_betterblog/post')->load($postId);
                     Mage::dispatchEvent(
                         'mageplaza_betterblog_controller_post_delete',
                         array('post' => $post)
@@ -281,7 +281,7 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_PostController extends Mage_Admi
         } else {
             try {
                 foreach ($postIds as $postId) {
-                $post = Mage::getSingleton('mageplaza_betterblog/post')->load($postId)
+                $post = Mage::getModel('mageplaza_betterblog/post')->load($postId)
                     ->setStatus($this->getRequest()->getParam('status'))
                     ->setIsMassupdate(true)
                     ->save();

@@ -46,16 +46,15 @@ class Mageplaza_BetterBlog_Model_Post_Attribute_Backend_File extends Mage_Eav_Mo
 
         try {
             $uploader = new Varien_File_Uploader($this->getAttribute()->getName());
-            //set allowed file extensions if you need
-            //$uploader->setAllowedExtensions(array('mp4', 'mov', 'f4v', 'flv'));
+            $uploader->setAllowedExtensions(array('pdf', 'doc', 'docx', 'txt', 'csv'));
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             $result = $uploader->save($path);
             $object->setData($this->getAttribute()->getName(), $result['file']);
             $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
         } catch (Exception $e) {
-            if ($e->getCode() != 666) {
-                //throw $e;
+            if ($e->getCode() != Varien_File_Uploader::TMP_NAME_EMPTY) {
+                Mage::logException($e);
             }
             return;
         }

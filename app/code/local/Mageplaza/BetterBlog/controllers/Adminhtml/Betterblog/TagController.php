@@ -76,7 +76,7 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_TagController extends Mageplaza_
      */
     public function editAction()
     {
-        $tagId    = $this->getRequest()->getParam('id');
+        $tagId    = (int)$this->getRequest()->getParam('id');
         $tag      = $this->_initTag();
         if ($tagId && !$tag->getId()) {
             $this->_getSession()->addError(
@@ -176,10 +176,10 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_TagController extends Mageplaza_
      */
     public function deleteAction()
     {
-        if ( $this->getRequest()->getParam('id') > 0) {
+        if ( (int)$this->getRequest()->getParam('id') > 0) {
             try {
                 $tag = Mage::getModel('mageplaza_betterblog/tag');
-                $tag->setId($this->getRequest()->getParam('id'))->delete();
+                $tag->setId((int)$this->getRequest()->getParam('id'))->delete();
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('mageplaza_betterblog')->__('Tag was successfully deleted.')
                 );
@@ -255,7 +255,7 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_TagController extends Mageplaza_
         } else {
             try {
                 foreach ($tagIds as $tagId) {
-                $tag = Mage::getSingleton('mageplaza_betterblog/tag')->load($tagId)
+                $tag = Mage::getModel('mageplaza_betterblog/tag')->load($tagId)
                             ->setStatus($this->getRequest()->getParam('status'))
                             ->setIsMassupdate(true)
                             ->save();

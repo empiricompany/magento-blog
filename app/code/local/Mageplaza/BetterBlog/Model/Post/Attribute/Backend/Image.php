@@ -46,14 +46,15 @@ class Mageplaza_BetterBlog_Model_Post_Attribute_Backend_Image extends Mage_Eav_M
 
         try {
             $uploader = new Varien_File_Uploader($this->getAttribute()->getName());
+            $uploader->setAllowedExtensions(array('jpg', 'jpeg', 'gif', 'png', 'webp', 'svg'));
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
             $result = $uploader->save($path);
             $object->setData($this->getAttribute()->getName(), $result['file']);
             $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
         } catch (Exception $e) {
-            if ($e->getCode() != 666) {
-                //throw $e;
+            if ($e->getCode() != Varien_File_Uploader::TMP_NAME_EMPTY) {
+                Mage::logException($e);
             }
             return;
         }

@@ -249,7 +249,7 @@
                         </show_post_same_category>
 
                         <post_same_category_count translate="label">
-                            <label>Meta title for posts list page</label>
+                            <label>Number of same category posts to display</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>66</sort_order>
                             <show_in_default>1</show_in_default>
@@ -316,83 +316,9 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[
-                            Select Comment engine: Default, <a href="https://developers.facebook.com/docs/plugins/comments">Facebook</a>, <a href="https://disqus.com/admin/create/" target="_blank">Disqus</a> comment. <br>
-
+                            Select Comment engine: Default comment form. <br>
                             ]]></comment>
                         </type>
-                        <disqus>
-                            <label>Disqus unique name</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment>
-                                <![CDATA[Create at <a href="https://disqus.com/admin/create/" target="_blank">Disqus</a>]]></comment>
-                            <depends>
-                                <type>disqus</type>
-                            </depends>
-                        </disqus>
-
-                        <facebook_appid>
-                            <label>Facebook: AppID</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment>
-                                <![CDATA[Regiter AppID <a href="https://developers.facebook.com/apps/" target="_blank">here</a>]]></comment>
-                            <depends>
-                                <type>facebook</type>
-                            </depends>
-                        </facebook_appid>
-
-                        <facebook_number_comment>
-                            <label>Facebook: Number of comment</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>31</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment>
-                                <![CDATA[The number of comments to show by default. The minimum value is 1.]]></comment>
-                            <depends>
-                                <type>facebook</type>
-                            </depends>
-                        </facebook_number_comment>
-
-                        <facebook_colorscheme>
-                            <label>Facebook: Color scheme</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>mageplaza_betterblog/adminhtml_source_comment_facebook_colorscheme
-                            </source_model>
-                            <sort_order>32</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment>
-                                <![CDATA[Light/Dark]]></comment>
-                            <depends>
-                                <type>facebook</type>
-                            </depends>
-                        </facebook_colorscheme>
-
-                        <facebook_order_by>
-                            <label>Facebook: Order by</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>mageplaza_betterblog/adminhtml_source_comment_facebook_orderby</source_model>
-                            <sort_order>32</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment>
-                                <![CDATA[The order to use when displaying comments. Can be "social", "reverse_time", or "time".]]></comment>
-                            <depends>
-                                <type>facebook</type>
-                            </depends>
-                        </facebook_order_by>
-
 
                     </fields>
                 </comment>
@@ -517,7 +443,7 @@
                         </enable_comment_widget>
 
                         <number_comment translate="label comment">
-                            <label>Number of comemnts</label>
+                            <label>Number of comments</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>22</sort_order>
                             <show_in_default>1</show_in_default>

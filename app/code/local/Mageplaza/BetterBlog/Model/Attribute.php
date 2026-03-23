@@ -228,7 +228,7 @@ class Mageplaza_BetterBlog_Model_Attribute extends Mage_Eav_Model_Entity_Attribu
             $attributeLabels = array();
             $attributes = Mage::getResourceSingleton('catalog/product')->getAttributesByCode();
             foreach ($attributes as $attribute) {
-                if (strlen($attribute->getData('frontend_label')) > 0) {
+                if (strlen((string)$attribute->getData('frontend_label')) > 0) {
                     $attributeLabels[] = $attribute->getData('frontend_label');
                 }
             }

@@ -42,4 +42,12 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_Tag_WidgetController extends Mag
         );
         $this->getResponse()->setBody($grid->toHtml());
     }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return Mage::getSingleton('admin/session')->isAllowed('mageplaza_betterblog/tag');
+    }
 }

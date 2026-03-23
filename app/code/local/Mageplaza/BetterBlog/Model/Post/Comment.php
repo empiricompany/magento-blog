@@ -110,15 +110,21 @@ class Mageplaza_BetterBlog_Model_Post_Comment extends Mage_Core_Model_Abstract
         $errors = array();
 
         if (!Zend_Validate::is($this->getTitle(), 'NotEmpty')) {
-            $errors[] = Mage::helper('review')->__('Comment title can\'t be empty');
+            $errors[] = Mage::helper('mageplaza_betterblog')->__('Comment title can\'t be empty');
         }
 
         if (!Zend_Validate::is($this->getName(), 'NotEmpty')) {
-            $errors[] = Mage::helper('review')->__('Your name can\'t be empty');
+            $errors[] = Mage::helper('mageplaza_betterblog')->__('Your name can\'t be empty');
         }
 
         if (!Zend_Validate::is($this->getComment(), 'NotEmpty')) {
-            $errors[] = Mage::helper('review')->__('Comment can\'t be empty');
+            $errors[] = Mage::helper('mageplaza_betterblog')->__('Comment can\'t be empty');
+        }
+
+        if (!Zend_Validate::is($this->getEmail(), 'NotEmpty')) {
+            $errors[] = Mage::helper('mageplaza_betterblog')->__('Email can\'t be empty');
+        } elseif (!Zend_Validate::is($this->getEmail(), 'EmailAddress')) {
+            $errors[] = Mage::helper('mageplaza_betterblog')->__('Please enter a valid email address');
         }
 
         if (empty($errors)) {
@@ -130,7 +136,7 @@ class Mageplaza_BetterBlog_Model_Post_Comment extends Mage_Core_Model_Abstract
     protected function _getPost()
     {
         if($this->getPost()){
-            return $this->getPOst();
+            return $this->getPost();
         } else{
             $postId = $this->getPostId();
             $post = Mage::getModel('mageplaza_betterblog/post')->load($postId);
@@ -152,8 +158,22 @@ class Mageplaza_BetterBlog_Model_Post_Comment extends Mage_Core_Model_Abstract
                 ->addFieldToFilter('status', self::STATUS_APPROVED)
                 ->count();
             try {
-                $post->setData('comment_count',(int) $count);
-                $post->save();
+                $resource = Mage::getResourceModel('mageplaza_betterblog/post');
+                $attribute = $resource->getAttribute('comment_count');
+                if ($attribute) {
+                    $adapter = $resource->getWriteConnection();
+                    $table = $attribute->getBackend()->getTable();
+                    $adapter->insertOnDuplicate(
+                        $table,
+                        array(
+                            'entity_type_id' => (int)$resource->getEntityType()->getId(),
+                            'entity_id'      => (int)$postId,
+                            'attribute_id'   => (int)$attribute->getAttributeId(),
+                            'value'          => (int)$count,
+                        ),
+                        array('value')
+                    );
+                }
             } catch (Exception $e) {
                 Mage::log('Betterblog: Cannot save comment count. ' . $e->getMessage());
             }

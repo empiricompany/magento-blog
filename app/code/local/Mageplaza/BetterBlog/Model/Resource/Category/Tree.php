@@ -90,7 +90,7 @@ class Mageplaza_BetterBlog_Model_Resource_Category_Tree extends Varien_Data_Tree
     public function setCollection($collection)
     {
         if (!is_null($this->_collection)) {
-            destruct($this->_collection);
+            unset($this->_collection);
         }
         $this->_collection = $collection;
         return $this;

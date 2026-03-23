@@ -78,7 +78,7 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_Post_CommentController extends M
      */
     public function editAction()
     {
-        $commentId    = $this->getRequest()->getParam('id');
+        $commentId    = (int)$this->getRequest()->getParam('id');
         $comment      = $this->_initComment();
         if (!$comment->getId()) {
             $this->_getSession()->addError(
@@ -161,10 +161,10 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_Post_CommentController extends M
      */
     public function deleteAction()
     {
-        if ( $this->getRequest()->getParam('id') > 0) {
+        if ( (int)$this->getRequest()->getParam('id') > 0) {
             try {
                 $comment = Mage::getModel('mageplaza_betterblog/post_comment');
-                $comment->setId($this->getRequest()->getParam('id'))->delete();
+                $comment->setId((int)$this->getRequest()->getParam('id'))->delete();
                 Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('mageplaza_betterblog')->__('Comment was successfully deleted.')
                 );
@@ -244,7 +244,7 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_Post_CommentController extends M
         } else {
             try {
                 foreach ($commentIds as $commentId) {
-                    $comment = Mage::getSingleton('mageplaza_betterblog/post_comment')->load($commentId)
+                    $comment = Mage::getModel('mageplaza_betterblog/post_comment')->load($commentId)
                          ->setStatus($this->getRequest()->getParam('status'))
                          ->setIsMassupdate(true)
                          ->save();

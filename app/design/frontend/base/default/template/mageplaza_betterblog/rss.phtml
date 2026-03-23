@@ -34,8 +34,8 @@
     <tbody>
         <?php foreach ($_feeds as $_feed): ?>
         <tr>
-            <td><?php echo $_feed->getLabel() ?></td>
-            <td><a href="<?php echo $_feed->getUrl() ?>" class="link-rss"><?php echo Mage::helper('mageplaza_betterblog')->__('Get Feed'); ?></a></td>
+            <td><?php echo $this->escapeHtml($_feed->getLabel()) ?></td>
+            <td><a href="<?php echo $this->escapeUrl($_feed->getUrl()) ?>" class="link-rss"><?php echo Mage::helper('mageplaza_betterblog')->__('Get Feed'); ?></a></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

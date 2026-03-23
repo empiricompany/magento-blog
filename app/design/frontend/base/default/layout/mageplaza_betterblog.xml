@@ -143,13 +143,6 @@
                     <block type="mageplaza_betterblog/post_comment_form" template="mageplaza_betterblog/post/comment/form.phtml" name="comment_form" as="comment_form" />
                 </block>
 
-                <!--2. Disqus-->
-                <block type="mageplaza_betterblog/post_comment_disqus"  template="mageplaza_betterblog/post/comment/disqus.phtml" name="post.comments_disqus" as="disqus_comment" />
-
-                <!--3. Facebook comment-->
-                <block type="mageplaza_betterblog/post_comment_facebook" template="mageplaza_betterblog/post/comment/facebook.phtml" name="post.comments_facebook" as="facebook_comment" />
-
-
             </block>
 
 

@@ -759,7 +759,7 @@ class Mageplaza_BetterBlog_Model_Resource_Category extends Mage_Core_Model_Resou
      */
     public function formatUrlKey($str)
     {
-        $urlKey = preg_replace('#[^0-9a-z]+#i', '-', Mage::helper('catalog/product_url')->format($str));
+        $urlKey = preg_replace('#[^0-9a-z]+#i', '-', Mage::helper('catalog/product_url')->format((string)$str));
         $urlKey = strtolower($urlKey);
         $urlKey = trim($urlKey, '-');
         return $urlKey;

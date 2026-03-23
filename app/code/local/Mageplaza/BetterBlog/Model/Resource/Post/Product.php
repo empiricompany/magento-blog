@@ -51,41 +51,50 @@ class Mageplaza_BetterBlog_Model_Resource_Post_Product extends Mage_Core_Model_R
             $data = array();
         }
         $adapter = $this->_getWriteAdapter();
-        $bind    = array(
-            ':post_id'    => (int)$post->getId(),
-        );
-        $select = $adapter->select()
-            ->from($this->getMainTable(), array('entity_id'))
-            ->where('post_id = :post_id');
+        $adapter->beginTransaction();
 
-        $related   = $adapter->fetchCol($select, $bind);
-        $deleteIds = array();
-        foreach ($related as $relId => $productId) {
-            if (!isset($data[$productId])) {
+        try {
+            $bind = array(
+                ':post_id' => (int)$post->getId(),
+            );
+            $select = $adapter->select()
+                ->from($this->getMainTable(), array('entity_id'))
+                ->where('post_id = :post_id');
+
+            $related = $adapter->fetchCol($select, $bind);
+            $deleteIds = array();
+            foreach ($related as $productId) {
+                if (!isset($data[$productId])) {
+                    $deleteIds[] = (int)$productId;
+                }
+            }
+            if (!empty($deleteIds)) {
                 $adapter->delete(
                     $this->getMainTable(),
-                    'entity_id = '. (int)$productId .' AND post_id = '.(int)$post->getId()
+                    array(
+                        'entity_id IN (?)' => $deleteIds,
+                        'post_id = ?'      => (int)$post->getId(),
+                    )
                 );
-                //$deleteIds[] = (int)$productId;
             }
-        }
-        /*if (!empty($deleteIds)) {
-            $adapter->delete(
-                $this->getMainTable(),
-                array('entity_id ' => $deleteIds, 'post_id' => (int)$post->getId())
-            );
-        }*/
 
-        foreach ($data as $productId => $info) {
-            $adapter->insertOnDuplicate(
-                $this->getMainTable(),
-                array(
-                    'post_id'      => $post->getId(),
-                    'entity_id'     => $productId,
-                    'position'      => @$info['position']
-                ),
-                array('position')
-            );
+            foreach ($data as $productId => $info) {
+                $position = isset($info['position']) ? (int)$info['position'] : 0;
+                $adapter->insertOnDuplicate(
+                    $this->getMainTable(),
+                    array(
+                        'post_id'   => $post->getId(),
+                        'entity_id' => $productId,
+                        'position'  => $position,
+                    ),
+                    array('position')
+                );
+            }
+
+            $adapter->commit();
+        } catch (Exception $e) {
+            $adapter->rollBack();
+            throw $e;
         }
         return $this;
     }

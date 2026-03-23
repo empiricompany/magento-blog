@@ -320,7 +320,7 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_CategoryController extends Magep
         if ($data = $this->getRequest()->getPost('category')) {
             $category->addData($data);
             if (!$category->getId()) {
-                $parentId = $this->getRequest()->getParam('parent');
+                $parentId = (int)$this->getRequest()->getParam('parent');
                 if (!$parentId) {
                     $parentId = Mage::helper('mageplaza_betterblog/category')->getRootCategoryId();
                 }

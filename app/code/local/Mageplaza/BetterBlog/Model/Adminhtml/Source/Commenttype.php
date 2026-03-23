@@ -42,15 +42,6 @@ class Mageplaza_BetterBlog_Model_Adminhtml_Source_Commenttype extends Mage_Eav_M
                 'label' => Mage::helper('mageplaza_betterblog')->__('Default Comment Form'),
                 'value' => 'default'
             ),
-            array(
-                'label' => Mage::helper('mageplaza_betterblog')->__('Facebook Comment'),
-                'value' => 'facebook'
-            ),
-            array(
-                'label' => Mage::helper('mageplaza_betterblog')->__('Disqus Comment'),
-                'value' => 'disqus'
-            ),
-
         );
     }
 

@@ -32,11 +32,8 @@
 <?php $_post = $this->getCurrentPost(); ?>
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-568cdc40e9eab41d"
-            async="async"></script>
-
     <div class="page-title post-title">
-        <h1><?php echo $_post->getPostTitle(); ?></h1>
+        <h1><?php echo $this->escapeHtml($_post->getPostTitle()); ?></h1>
     </div>
     <div class="post-view">
 
@@ -55,7 +52,7 @@
 
         <div class="post-image">
             <?php if ($_post->getImage()) : ?>
-                <a href="<?php echo $_post->getPostUrl(); ?>" title="<?php echo $_post->getPostTitle(); ?>">
+                <a href="<?php echo $this->escapeUrl($_post->getPostUrl()); ?>" title="<?php echo $this->escapeHtml($_post->getPostTitle()); ?>">
                     <img src="<?php echo Mage::helper('mageplaza_betterblog/post_image')->init($_post, 'image'); ?>"
                          alt="<?php echo $this->escapeHtml($_post->getPostTitle()); ?>"/>
                 </a>
@@ -70,13 +67,13 @@
         <div class="post-products post-post_content">
             <?php $relatedProducts = $_post->getSelectedProductsCollection(); ?>
             <?php if ($relatedProducts): ?>
-                <h2><?php echo $this->__('Prodotti'); ?></h2>
+                <h2><?php echo $this->__('Products'); ?></h2>
                 <ul>
                     <?php foreach ($relatedProducts as $_product): ?>
                         <li>
-                            <a href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $this->__('Compra'); ?> <?php echo $_product->getName(); ?>">
+                            <a href="<?php echo $this->escapeUrl($_product->getProductUrl()) ?>" title="<?php echo $this->__('Buy'); ?> <?php echo $this->escapeHtml($_product->getName()); ?>">
                                 <img class="img-responsive" src="<?php echo $this->helper('catalog/image')->init($_product,'small_image')->resize(350); ?>" border="0" /> <br class="clear">
-                                <button type="button" title="<?php echo $this->__('Compra'); ?> <?php echo $_product->getName(); ?>" class="button btn-cart"><span><span><?php echo $this->__('Compra'); ?> <?php echo $_product->getName(); ?></span></span></button>
+                                <button type="button" title="<?php echo $this->__('Buy'); ?> <?php echo $this->escapeHtml($_product->getName()); ?>" class="button btn-cart"><span><span><?php echo $this->__('Buy'); ?> <?php echo $this->escapeHtml($_product->getName()); ?></span></span></button>
                             </a>
                         </li>
                     <?php endforeach; ?>
@@ -87,19 +84,14 @@
     </div>
 
 
-    <div class="post-sharing-button">
-        <div class="addthis_sharing_toolbox"></div>
-    </div>
-
-
     <div class="post-same-topics post-list">
         <?php $similarPosts = $this->getPostTopics(); ?>
         <?php if ($similarPosts): ?>
-            <h2><?php echo $this->__('Topic'); ?>: <?php echo $this->getTopicLabel(); ?></h2>
+            <h2><?php echo $this->__('Topic'); ?>: <?php echo $this->escapeHtml($this->getTopicLabel()); ?></h2>
             <ul>
                 <?php foreach ($similarPosts as $post): ?>
                     <li>
-                        <a href="<?php echo $post->getPostUrl() ?>"><?php echo $post->getPostTitle(); ?></a>
+                        <a href="<?php echo $this->escapeUrl($post->getPostUrl()) ?>"><?php echo $this->escapeHtml($post->getPostTitle()); ?></a>
                     </li>
                 <?php endforeach; ?>
 
@@ -113,11 +105,11 @@
     <div class="post-list posts-in-category">
         <?php $posts = $this->getPostsInCategory(); ?>
         <?php if ($posts && $posts->count()): ?>
-            <h2><?php echo $this->__('Category'); ?>: <?php echo $this->getCategoryName(); ?></h2>
+            <h2><?php echo $this->__('Category'); ?>: <?php echo $this->escapeHtml($this->getCategoryName()); ?></h2>
             <ul>
                 <?php foreach ($posts as $post): ?>
                     <li>
-                        <a href="<?php echo $post->getPostUrl() ?>"><?php echo $post->getPostTitle(); ?></a>
+                        <a href="<?php echo $this->escapeUrl($post->getPostUrl()) ?>"><?php echo $this->escapeHtml($post->getPostTitle()); ?></a>
                     </li>
                 <?php endforeach; ?>
 

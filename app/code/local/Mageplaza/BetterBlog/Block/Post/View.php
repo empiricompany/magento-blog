@@ -58,29 +58,29 @@ class Mageplaza_BetterBlog_Block_Post_View extends Mage_Core_Block_Template
     public function getPostsInCategory()
     {
         $currentPost = $this->getCurrentPost();
-        $categories = $currentPost->getSelectedCategories();
-        $category = null;
-        if ($currentPost->getSelectedCategories()) {
-            $category = isset($categories[0]) ? $categories[0] : null;
-            $this->setCategoryName($category->getName());
-            if ($category) {
-                $config = Mage::helper('mageplaza_betterblog/config');
-                $posts = Mage::getResourceModel('mageplaza_betterblog/post_collection')
-                    ->setStoreId(Mage::app()->getStore()->getId())
-                    ->addAttributeToSelect('*')
-                    ->addAttributeToFilter('status', 1)
-                    ->addAttributeToFilter('entity_id',array('neq'=>$currentPost->getId()))
-                ;
-                $posts->setOrder('post_title', 'asc');
-                $posts->addCategoryFilter($category->getId());
-                $posts->setPageSize($config->getPostConfig('post_same_category_count'));
-                $posts->unshiftOrder('related_category.position', 'ASC');
-                return $posts;
-            }
-
-
+        if (!$currentPost) {
+            return null;
         }
-        return null;
+        $categories = $currentPost->getSelectedCategories();
+        if (empty($categories)) {
+            return null;
+        }
+        $category = isset($categories[0]) ? $categories[0] : null;
+        if (!$category) {
+            return null;
+        }
+        $this->setCategoryName($category->getName());
+        $config = Mage::helper('mageplaza_betterblog/config');
+        $posts = Mage::getResourceModel('mageplaza_betterblog/post_collection')
+            ->setStoreId(Mage::app()->getStore()->getId())
+            ->addAttributeToSelect(array('post_title', 'url_key', 'post_excerpt', 'image', 'created_at'))
+            ->addAttributeToFilter('status', 1)
+            ->addAttributeToFilter('entity_id', array('neq' => $currentPost->getId()));
+        $posts->setOrder('post_title', 'asc');
+        $posts->addCategoryFilter($category->getId());
+        $posts->setPageSize($config->getPostConfig('post_same_category_count'));
+        $posts->unshiftOrder('related_category.position', 'ASC');
+        return $posts;
     }
 
     public function canShowPostSameCategory()

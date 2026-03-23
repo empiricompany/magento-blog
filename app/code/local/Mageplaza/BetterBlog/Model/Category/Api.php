@@ -173,9 +173,10 @@ class Mageplaza_BetterBlog_Model_Category_Api extends Mage_Api_Model_Resource_Ab
         $parentCategory = $this->_initCategory($parentId);
         if ($afterId === null && $parentCategory->hasChildren()) {
             $parentChildren = $parentCategory->getChildCategories();
-            $afterId = array_pop(explode(',', $parentChildren));
+            $childIds = explode(',', $parentChildren);
+            $afterId = array_pop($childIds);
         }
-        if ( strpos($parentCategory->getPath(), $category->getPath()) === 0) {
+        if (strpos($parentCategory->getPath() . '/', $category->getPath() . '/') === 0) {
             $this->_fault(
                 'not_moved',
                 Mage::helper('mageplaza_betterblog')->__("Cannot move parent inside category")

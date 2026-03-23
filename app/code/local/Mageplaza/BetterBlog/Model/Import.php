@@ -2,19 +2,12 @@
 
 class Mageplaza_BetterBlog_Model_Import
 {
-
-
     /**
-     * process import aw blog
+     * Process import from AW Blog extension
      */
     public function aw()
     {
-        /**
-         * Import categories
-         */
-
         $categories = Mage::getModel('blog/cat')->getCollection();
-        $parent = Mage::getModel('mageplaza_betterblog/category')->load(1);
         foreach ($categories as $_cat) {
             $data = array(
                 'name' => $_cat->getData('title'),
@@ -29,13 +22,11 @@ class Mageplaza_BetterBlog_Model_Import
             $category->setData($data);
             try {
                 $category->save();
-                $category->setPath('1' . $category->getPath());
+                $category->setPath('1/' . $category->getId());
                 $category->save();
                 $newCatId = $category->getId();
                 $posts = $this->_getAllPostsInCategory($_cat->getCatId());
                 foreach ($posts as $_post) {
-                    var_dump($_post->getData('post_content'));
-                    die;
                     $model = Mage::getModel('mageplaza_betterblog/post');
                     $_postData = array(
                         'post_title' => $_post->getData('title'),
@@ -59,22 +50,21 @@ class Mageplaza_BetterBlog_Model_Import
                     $this->_insertComments($comments, $model);
                 }
             } catch (Exception $e) {
+                Mage::logException($e);
                 Mage::log('Cannot save category #' . $data['name'] . '. ' . $e->getMessage());
             }
         }
     }
 
     /**
-     * get all posts in category id
-     * @param $id
+     * Get all posts in category id
+     *
+     * @param int $id
      * @return mixed
      */
     protected function _getAllPostsInCategory($id)
     {
         $collection = Mage::getModel('blog/blog')->getCollection()
-//            ->addPresentFilter()
-//            ->addEnableFilter(AW_Blog_Model_Status::STATUS_ENABLED)
-//            ->addStoreFilter()
             ->joinComments();
         $collection->addCatFilter($id);
         return $collection;
@@ -82,14 +72,21 @@ class Mageplaza_BetterBlog_Model_Import
 
     /**
      * Insert tags
-     * @param $tags
-     * @param $post
+     *
+     * @param mixed $tags
+     * @param Mageplaza_BetterBlog_Model_Post $post
      */
     protected function _insertTags($tags, $post)
     {
         $tagArray = array();
-        $tags = implode(',', $tags);
+        if (!is_array($tags)) {
+            $tags = explode(',', (string)$tags);
+        }
         foreach ($tags as $_tag) {
+            $_tag = trim((string)$_tag);
+            if ($_tag === '') {
+                continue;
+            }
             $model = Mage::getModel('mageplaza_betterblog/tag')->getCollection()
                 ->addFieldToFilter('name', $_tag)
                 ->getFirstItem();
@@ -112,19 +109,42 @@ class Mageplaza_BetterBlog_Model_Import
                     );
                 }
             }
-
         }
         $post->setTagsData($tagArray);
         try {
             $post->save();
         } catch (Exception $e) {
+            Mage::logException($e);
         }
-
     }
 
+    /**
+     * Insert comments from AW Blog
+     *
+     * @param mixed $comments
+     * @param Mageplaza_BetterBlog_Model_Post $post
+     */
     protected function _insertComments($comments, $post)
     {
-
-
+        if (!$comments) {
+            return;
+        }
+        foreach ($comments as $commentData) {
+            try {
+                $comment = Mage::getModel('mageplaza_betterblog/post_comment');
+                $comment->setData(array(
+                    'post_id'    => $post->getId(),
+                    'title'      => (string)$commentData->getData('comment'),
+                    'comment'    => (string)$commentData->getData('comment'),
+                    'name'       => (string)$commentData->getData('user'),
+                    'email'      => (string)$commentData->getData('email'),
+                    'status'     => (int)$commentData->getData('status'),
+                    'created_at' => $commentData->getData('created_time'),
+                ));
+                $comment->save();
+            } catch (Exception $e) {
+                Mage::logException($e);
+            }
+        }
     }
 }

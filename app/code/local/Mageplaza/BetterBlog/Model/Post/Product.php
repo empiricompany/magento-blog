@@ -35,7 +35,6 @@ class Mageplaza_BetterBlog_Model_Post_Product extends Mage_Core_Model_Abstract
      */
     public function getProductsCollection($post)
     {
-        Mage::log(__METHOD__);
         $collection = Mage::getResourceModel('mageplaza_betterblog/post_product_collection')
             ->addPostFilter($post);
         return $collection;

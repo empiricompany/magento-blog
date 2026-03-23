@@ -18,12 +18,6 @@ class Mageplaza_BetterBlog_Model_GenerateSitemap extends Mage_Core_Model_Abstrac
         $realPath = $io->getCleanPath(Mage::getBaseDir() . '/sitemap');
 
         $this->setSitemapPath(rtrim(str_replace(str_replace('\\', '/', Mage::getBaseDir()), '', $realPath), '/') . '/');
-
-        if (!$io->isWriteable($realPath)) {
-            Mage::throwException(Mage::helper('sitemap')->__('Please make sure that "%s" is writable by web-server.', $this->getSitemapPath()));
-        }
-
-
     }
 
     /**
@@ -58,89 +52,104 @@ class Mageplaza_BetterBlog_Model_GenerateSitemap extends Mage_Core_Model_Abstrac
     /**
      * Generate XML file
      *
-     * @return Mage_Sitemap_Model_Sitemap
+     * @return $this
      */
     public function generateXml()
     {
         $io = new Varien_Io_File();
         $io->setAllowCreateFolders(true);
-        $io->open(array('path' => $this->getPath()));
 
-        $io->streamOpen($this->getSitemapFilename());
-
-        $io->streamWrite('<?xml version="1.0" encoding="UTF-8"?>' . "\n");
-        $io->streamWrite('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
-
-        $storeId = $this->getStoreId();
-        $date = Mage::getSingleton('core/date')->gmtDate('Y-m-d');
-
-
-        /**
-         * Generate blog categories sitemap
-         */
-        $changefreq = (string)Mage::getStoreConfig('sitemap/category/changefreq', $storeId);
-        $priority   = (string)Mage::getStoreConfig('sitemap/category/priority', $storeId);
-        $collection = Mage::getResourceModel('mageplaza_betterblog/category_collection')
-            ->addStoreFilter(Mage::app()->getStore())
-            ->addFieldToFilter('status', 1)
-        ;
-
-        $categories = new Varien_Object();
-        $categories->setItems($collection);
-        Mage::dispatchEvent('sitemap_betterblog_categories_generating_before', array(
-            'collection' => $categories
-        ));
-        foreach ($categories->getItems() as $item) {
-            $xml = sprintf(
-                '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
-                htmlspecialchars($this->filterUrl($item->getCategoryUrl())),
-                $date,
-                $changefreq,
-                $priority
+        $path = $this->getPath();
+        if (!$io->isWriteable($path)) {
+            Mage::getSingleton('adminhtml/session')->addError(
+                Mage::helper('mageplaza_betterblog')->__('Please make sure that "%s" is writable by the web-server.', $this->getSitemapPath())
             );
-            $io->streamWrite($xml);
-        }
-        unset($collection);
-
-        /**
-         * Generate blog post sitemap
-         */
-        $changefreq = (string)Mage::getStoreConfig('sitemap/product/changefreq', $storeId);
-        $priority = (string)Mage::getStoreConfig('sitemap/product/priority', $storeId);
-        $collection = Mage::getResourceModel('mageplaza_betterblog/post_collection')
-            ->setStoreId(Mage::app()->getStore()->getId())
-            ->addAttributeToSelect('*')
-            ->addAttributeToFilter('status', 1)
-            ->setOrder('created_at', 'desc');
-        $posts = new Varien_Object();
-        $posts->setItems($collection);
-
-        Mage::dispatchEvent('sitemap_betterblog_generating_before', array(
-            'collection' => $posts,
-            'io' => $io,
-        ));
-
-        foreach ($posts->getItems() as $item) {
-            $xml = sprintf(
-                '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
-                htmlspecialchars($this->filterUrl($item->getPostUrl())),
-                $date,
-                $changefreq,
-                $priority
-            );
-            $io->streamWrite($xml);
+            return $this;
         }
 
+        try {
+            $io->open(array('path' => $path));
+            $io->streamOpen($this->getSitemapFilename());
 
-        $io->streamWrite('</urlset>');
-        $io->streamClose();
+            $io->streamWrite('<?xml version="1.0" encoding="UTF-8"?>' . "\n");
+            $io->streamWrite('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
 
-        Mage::getSingleton('core/session')->addSuccess('Generated Sitemap successfully!');
+            $storeId = Mage::app()->getStore()->getId();
+            $date = Mage::getSingleton('core/date')->gmtDate('Y-m-d');
+
+            /**
+             * Generate blog categories sitemap
+             */
+            $changefreq = (string)Mage::getStoreConfig('sitemap/category/changefreq', $storeId);
+            $priority   = (string)Mage::getStoreConfig('sitemap/category/priority', $storeId);
+            $collection = Mage::getResourceModel('mageplaza_betterblog/category_collection')
+                ->addStoreFilter(Mage::app()->getStore())
+                ->addFieldToFilter('status', 1);
+
+            $categories = new Varien_Object();
+            $categories->setItems($collection);
+            Mage::dispatchEvent('sitemap_betterblog_categories_generating_before', array(
+                'collection' => $categories
+            ));
+            foreach ($categories->getItems() as $item) {
+                $xml = sprintf(
+                    '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
+                    htmlspecialchars($this->filterUrl($item->getCategoryUrl())),
+                    $date,
+                    $changefreq,
+                    $priority
+                );
+                $io->streamWrite($xml);
+            }
+            unset($collection);
+
+            /**
+             * Generate blog post sitemap
+             */
+            $changefreq = (string)Mage::getStoreConfig('sitemap/product/changefreq', $storeId);
+            $priority = (string)Mage::getStoreConfig('sitemap/product/priority', $storeId);
+            $collection = Mage::getResourceModel('mageplaza_betterblog/post_collection')
+                ->setStoreId($storeId)
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('status', 1)
+                ->setOrder('created_at', 'desc');
+            $posts = new Varien_Object();
+            $posts->setItems($collection);
+
+            Mage::dispatchEvent('sitemap_betterblog_generating_before', array(
+                'collection' => $posts,
+                'io' => $io,
+            ));
+
+            foreach ($posts->getItems() as $item) {
+                $xml = sprintf(
+                    '<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%.1f</priority></url>',
+                    htmlspecialchars($this->filterUrl($item->getPostUrl())),
+                    $date,
+                    $changefreq,
+                    $priority
+                );
+                $io->streamWrite($xml);
+            }
+
+            $io->streamWrite('</urlset>');
+            $io->streamClose();
+
+            Mage::getSingleton('adminhtml/session')->addSuccess(
+                Mage::helper('mageplaza_betterblog')->__('Blog sitemap generated successfully.')
+            );
+        } catch (Exception $e) {
+            Mage::logException($e);
+            Mage::getSingleton('adminhtml/session')->addError(
+                Mage::helper('mageplaza_betterblog')->__('Error generating blog sitemap: %s', $e->getMessage())
+            );
+        }
+
+        return $this;
     }
 
     public function filterUrl($url)
     {
-        $url = str_replace('index.php/','',$url);
-        return $url;
+        return str_replace('index.php/', '', $url);
     }
 }

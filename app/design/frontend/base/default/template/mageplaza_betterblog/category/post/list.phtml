@@ -28,8 +28,8 @@
     <?php foreach ($_posts as $_post) : ?>
         <div class="post-list-item">
             <h3>
-                <a href="<?php echo $_post->getPostUrl()?>">
-                    <?php echo $_post->getPostTitle();?>
+                <a href="<?php echo $this->escapeUrl($_post->getPostUrl())?>">
+                    <?php echo $this->escapeHtml($_post->getPostTitle());?>
                 </a>
             </h3>
 

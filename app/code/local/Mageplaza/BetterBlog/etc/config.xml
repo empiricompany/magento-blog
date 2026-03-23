@@ -26,7 +26,7 @@
 <config>
     <modules>
         <Mageplaza_BetterBlog>
-            <version>1.2.0</version>
+            <version>1.3.0</version>
         </Mageplaza_BetterBlog>
     </modules>
     <global>
@@ -100,11 +100,6 @@
                     </eav_attribute>
                 </entities>
             </mageplaza_betterblog_resource>
-            <sitemap>
-                <rewrite>
-                    <sitemap>Mageplaza_BetterBlog_Model_Sitemap</sitemap>
-                </rewrite>
-            </sitemap>
         </models>
         <events>
             <controller_front_init_routers>
@@ -115,6 +110,15 @@
                     </mageplaza_betterblog>
                 </observers>
             </controller_front_init_routers>
+            <sitemap_urlset_generating_before>
+                <observers>
+                    <mageplaza_betterblog_sitemap>
+                        <type>singleton</type>
+                        <class>mageplaza_betterblog/observer</class>
+                        <method>addBlogToSitemap</method>
+                    </mageplaza_betterblog_sitemap>
+                </observers>
+            </sitemap_urlset_generating_before>
         </events>
     </global>
     <adminhtml>
@@ -144,28 +148,6 @@
                 <acl>mageplaza_betterblog</acl>
             </tag>
         </global_search>
-        <events>
-            <controller_action_predispatch>
-                <observers>
-                    <adminnotification>
-                        <type>singleton</type>
-                        <class>mageplaza_betterblog/feed</class>
-                        <method>updateFeed</method>
-                    </adminnotification>
-                </observers>
-            </controller_action_predispatch>
-            <betterblog_sitemap_products_generating_before>
-                <observers>
-                    <adminnotification>
-                        <type>singleton</type>
-                        <class>mageplaza_betterblog/observer</class>
-                        <method>generateSitemap</method>
-                    </adminnotification>
-                </observers>
-            </betterblog_sitemap_products_generating_before>
-
-        </events>
-
     </adminhtml>
     <admin>
         <routers>
@@ -228,12 +210,7 @@
                 <post_same_category_count>5</post_same_category_count>
             </post>
             <comment>
-                <type>disqus</type>
-                <disqus>mageplazablog</disqus>
-                <facebook_number_comment>10</facebook_number_comment>
-                <facebook_appid>1562328304081606</facebook_appid>
-                <facebook_colorscheme>light</facebook_colorscheme>
-                <facebook_order_by>social</facebook_order_by>
+                <type>default</type>
             </comment>
             <category>
                 <breadcrumbs>1</breadcrumbs>
@@ -256,6 +233,9 @@
     <crontab>
         <jobs>
             <betterblog_sitemap_generate>
+                <schedule>
+                    <cron_expr>0 3 * * *</cron_expr>
+                </schedule>
                 <run>
                     <model>mageplaza_betterblog/observer::scheduledGenerateSitemaps</model>
                 </run>

@@ -33,8 +33,8 @@
             <ul>
                 <?php foreach ($_categories as $_category) : ?>
                     <li>
-                        <a href="<?php echo $_category->getCategoryUrl() ?>">
-                            <?php echo $_category->getName(); ?>
+                        <a href="<?php echo $this->escapeUrl($_category->getCategoryUrl()) ?>">
+                            <?php echo $this->escapeHtml($_category->getName()); ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -43,3 +43,4 @@
     <?php else : ?>
         <?php echo Mage::helper('mageplaza_betterblog')->__('There are no categories at this moment'); ?>
     <?php endif; ?>
+</div>

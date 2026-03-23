@@ -25,10 +25,10 @@
 <?php $_post = $this->getCurrentPost();?>
 <?php if ($_post) :?>
     <div class="post-widget-view">
-        <h3><?php echo $_post->getPostTitle()?></h3>
+        <h3><?php echo $this->escapeHtml($_post->getPostTitle())?></h3>
         <div>
             <div class="post_title-widget">
-                <?php echo Mage::helper('mageplaza_betterblog')->__('Name');?>:<?php echo $_post->getPostTitle();?>
+                <?php echo Mage::helper('mageplaza_betterblog')->__('Name');?>:<?php echo $this->escapeHtml($_post->getPostTitle());?>
             </div>
             <div class="post_excerpt-widget">
                 <?php echo Mage::helper('mageplaza_betterblog')->__('Short Description');?>:<?php echo $_post->getPostExcerpt();?>

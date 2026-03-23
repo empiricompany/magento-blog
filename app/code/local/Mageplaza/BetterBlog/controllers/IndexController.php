@@ -47,10 +47,4 @@ class Mageplaza_BetterBlog_IndexController extends Mage_Core_Controller_Front_Ac
         }
         $this->renderLayout();
     }
-
-    public function testAction()
-    {
-//        Mage::getModel('mageplaza_betterblog/import')->aw();
-    }
-
 }

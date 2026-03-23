@@ -12,7 +12,7 @@
 <?php $i = 0; ?>
 
 
-    <h2><?php echo $this->getBlockName(); ?></h2>
+    <h2><?php echo $this->escapeHtml($this->getBlockName()); ?></h2>
 <?php foreach ($posts as $post): ?>
     <?php if ($i >= $postCount) break; ?>
 
@@ -24,7 +24,7 @@
     </div>
 
     <div class="post-list-item">
-        <h4><a href="<?php echo $post->getPostUrl(); ?>"><?php echo $post->getPostTitle(); ?></a></h4>
+        <h4><a href="<?php echo $this->escapeUrl($post->getPostUrl()); ?>"><?php echo $this->escapeHtml($post->getPostTitle()); ?></a></h4>
     </div>
     <div class="post-short-description">
         <p><?php echo $post->getPostExcerpt(); ?></p>

@@ -125,7 +125,7 @@ class Mageplaza_BetterBlog_Model_Post extends Mage_Catalog_Model_Abstract
      */
     public function getPostContent()
     {
-        $post_content = $this->getData('post_content');
+        $post_content = (string)$this->getData('post_content');
         $helper = Mage::helper('cms');
         $processor = $helper->getBlockTemplateProcessor();
         $html = $processor->filter($post_content);
@@ -324,7 +324,7 @@ class Mageplaza_BetterBlog_Model_Post extends Mage_Catalog_Model_Abstract
      * check if comments are allowed
      *
      * @access public
-     * @return array
+     * @return bool
      * @author Sam
      */
     public function getAllowComments()
@@ -361,9 +361,22 @@ class Mageplaza_BetterBlog_Model_Post extends Mage_Catalog_Model_Abstract
     public function updateViewCount()
     {
         try {
-            $this->setViews($this->getViews() + 1);
-            $this->save();
+            $resource = $this->getResource();
+            $attribute = $resource->getAttribute('views');
+            if ($attribute) {
+                $adapter = $resource->getWriteConnection();
+                $table = $attribute->getBackend()->getTable();
+                $adapter->update(
+                    $table,
+                    array('value' => new Zend_Db_Expr('value + 1')),
+                    array(
+                        'entity_id = ?'    => (int)$this->getId(),
+                        'attribute_id = ?' => (int)$attribute->getAttributeId(),
+                    )
+                );
+            }
         } catch (Exception $e) {
+            Mage::logException($e);
         }
     }
 
@@ -377,9 +390,12 @@ class Mageplaza_BetterBlog_Model_Post extends Mage_Catalog_Model_Abstract
         $categories = $this->getSelectedCategories();
         if (!$categories) return null;
         $categoryHtml = array();
+        $helper = Mage::helper('core');
 
         foreach ($categories as $_cat) {
-            $categoryHtml[] = '<a href="' . $_cat->getCategoryUrl() . '">' . $_cat->getName() . '</a>';
+            $name = $helper->escapeHtml($_cat->getName());
+            $url  = $helper->escapeUrl($_cat->getCategoryUrl());
+            $categoryHtml[] = '<a href="' . $url . '">' . $name . '</a>';
         }
 
         $result = implode(', ', $categoryHtml);

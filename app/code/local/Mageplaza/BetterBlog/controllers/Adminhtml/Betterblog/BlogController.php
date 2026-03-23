@@ -7,9 +7,11 @@ class Mageplaza_BetterBlog_Adminhtml_Betterblog_BlogController extends Mage_Admi
         Mage::getModel('mageplaza_betterblog/generateSitemap')->generateXml();
     }
 
-    public function importAwAction()
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
     {
-
-
+        return Mage::getSingleton('admin/session')->isAllowed('mageplaza_betterblog');
     }
 }

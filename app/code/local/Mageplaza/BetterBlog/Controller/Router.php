@@ -52,9 +52,9 @@ class Mageplaza_BetterBlog_Controller_Router extends Mage_Core_Controller_Varien
             Mage::app()->getFrontController()->getResponse()
                 ->setRedirect(Mage::getUrl('install'))
                 ->sendResponse();
-            exit;
+            return false;
         }
-        $urlKey = trim($request->getPathInfo(), '/');
+        $urlKey = trim((string)$request->getPathInfo(), '/');
         $check = array();
         $check['post'] = new Varien_Object(
             array(
@@ -95,7 +95,7 @@ class Mageplaza_BetterBlog_Controller_Router extends Mage_Core_Controller_Varien
                 'check_path'    => 0
             )
         );
-        foreach ($check as $key=>$settings) {
+        foreach ($check as $key => $settings) {
             if ($settings->getListKey()) {
                 if ($urlKey == $settings->getListKey()) {
                     $request->setModuleName('blog')
@@ -108,18 +108,19 @@ class Mageplaza_BetterBlog_Controller_Router extends Mage_Core_Controller_Varien
                     return true;
                 }
             }
+            $entityUrlKey = $urlKey;
             if ($settings['prefix']) {
-                $parts = explode('/', $urlKey);
+                $parts = explode('/', $entityUrlKey);
                 if ($parts[0] != $settings['prefix'] || count($parts) != 2) {
                     continue;
                 }
-                $urlKey = $parts[1];
+                $entityUrlKey = $parts[1];
             }
             if ($settings['suffix']) {
-                $urlKey = substr($urlKey, 0, -strlen($settings['suffix']) - 1);
+                $entityUrlKey = substr($entityUrlKey, 0, -strlen($settings['suffix']) - 1);
             }
             $model = Mage::getModel($settings->getModel());
-            $id = $model->checkUrlKey($urlKey, Mage::app()->getStore()->getId());
+            $id = $model->checkUrlKey($entityUrlKey, Mage::app()->getStore()->getId());
             if ($id) {
                 if ($settings->getCheckPath() && !$model->load($id)->getStatusPath()) {
                     continue;
@@ -130,7 +131,7 @@ class Mageplaza_BetterBlog_Controller_Router extends Mage_Core_Controller_Varien
                     ->setParam($settings->getParam(), $id);
                 $request->setAlias(
                     Mage_Core_Model_Url_Rewrite::REWRITE_REQUEST_PATH_ALIAS,
-                    $urlKey
+                    $entityUrlKey
                 );
                 return true;
             }

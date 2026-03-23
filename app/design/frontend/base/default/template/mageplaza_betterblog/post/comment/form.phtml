@@ -27,16 +27,17 @@
     <h2><?php echo $this->__('Write Your Comment') ?></h2>
     <?php if ($this->getAllowWriteCommentFlag()): ?>
         <form action="<?php echo $this->getAction() ?>" method="post" id="comment-form">
+            <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" />
             <fieldset>
                 <ul class="form-list">
                     <li>
-                        <label for="nickname_field" class="required"><em>*</em><?php echo $this->__('Nickname') ?></label>
+                        <label for="name_field" class="required"><em>*</em><?php echo $this->__('Nickname') ?></label>
                         <div class="input-box">
                             <input type="text" name="name" id="name_field" class="input-text required-entry" value="<?php echo $this->escapeHtml($data->getName()) ?>" />
                         </div>
                     </li>
                     <li>
-                        <label for="nickname_field" class="required"><em>*</em><?php echo $this->__('E-mail') ?></label>
+                        <label for="email_field" class="required"><em>*</em><?php echo $this->__('E-mail') ?></label>
                         <div class="input-box">
                             <input type="text" name="email" id="email_field" class="input-text required-entry validate-email" value="<?php echo $this->escapeHtml($data->getEmail()) ?>" />
                         </div>

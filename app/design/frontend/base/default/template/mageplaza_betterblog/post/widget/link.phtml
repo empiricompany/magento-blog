@@ -25,6 +25,6 @@
 <?php $_post = $this->getCurrentPost();?>
 <?php if ($_post) :?>
     <div class="post-widget-link">
-        <a href="<?php echo $_post->getPostUrl()?>"><?php echo $_post->getPostTitle()?></a>
+        <a href="<?php echo $this->escapeUrl($_post->getPostUrl())?>"><?php echo $this->escapeHtml($_post->getPostTitle())?></a>
     </div>
 <?php endif;?>

@@ -25,14 +25,14 @@
 <?php $_categories = $this->getCategories(); ?>
 <?php if ($_categories->getSize() > 0) :?>
     <div class="page-title category-title">
-        <h2><?php echo $this->getCurrentCategory()->getName(); ?>:<?php echo $this->__('Children')?></h2>
+        <h2><?php echo $this->escapeHtml($this->getCurrentCategory()->getName()); ?>:<?php echo $this->__('Children')?></h2>
     </div>
     <?php if ($this->_getDisplayMode() == 0) : ?>
         <div class="category-list-container">
             <?php foreach ($_categories as $_category) : ?>
                 <div class="category-list-item">
                     <a href="<?php echo $_category->getCategoryUrl();?>" title="<?php echo $this->escapeHtml($_category->getName()) ?>">
-                        <?php echo $_category->getName(); ?>
+                        <?php echo $this->escapeHtml($_category->getName()); ?>
                     </a>
                 </div>
             <?php endforeach;?>

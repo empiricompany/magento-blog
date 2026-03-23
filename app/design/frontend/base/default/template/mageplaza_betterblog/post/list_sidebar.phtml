@@ -6,7 +6,7 @@
     <div class="block-content">
         <ul>
             <?php foreach ($posts as $post): ?>
-                <li><a href="<?php echo $post->getPostUrl(); ?>"><?php echo $post->getPostTitle(); ?></a></li>
+                <li><a href="<?php echo $this->escapeUrl($post->getPostUrl()); ?>"><?php echo $this->escapeHtml($post->getPostTitle()); ?></a></li>
             <?php endforeach; ?>
         </ul>
 

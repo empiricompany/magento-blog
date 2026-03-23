@@ -99,7 +99,7 @@ class Mageplaza_BetterBlog_Adminhtml_BetterBlog_Post_AttributeController extends
      */
     public function editAction()
     {
-        $id = $this->getRequest()->getParam('attribute_id');
+        $id = (int)$this->getRequest()->getParam('attribute_id');
         $model = Mage::getModel('mageplaza_betterblog/resource_eav_attribute')
             ->setEntityTypeId($this->_entityTypeId);
         if ($id) {
@@ -216,7 +216,7 @@ class Mageplaza_BetterBlog_Adminhtml_BetterBlog_Post_AttributeController extends
             $redirectBack = $this->getRequest()->getParam('back', false);
             $model        = Mage::getModel('mageplaza_betterblog/resource_eav_attribute');
             $helper       = Mage::helper('mageplaza_betterblog/post');
-            $id           = $this->getRequest()->getParam('attribute_id');
+            $id           = (int)$this->getRequest()->getParam('attribute_id');
             //validate attribute_code
             if (isset($data['attribute_code'])) {
                 $validatorAttrCode = new Zend_Validate_Regex(array('pattern' => '/^[a-z_0-9]{1,255}$/'));
@@ -308,7 +308,7 @@ class Mageplaza_BetterBlog_Adminhtml_BetterBlog_Post_AttributeController extends
      */
     public function deleteAction()
     {
-        if ($id = $this->getRequest()->getParam('attribute_id')) {
+        if ($id = (int)$this->getRequest()->getParam('attribute_id')) {
             $model = Mage::getModel('mageplaza_betterblog/resource_eav_attribute');
             // entity type check
             $model->load($id);

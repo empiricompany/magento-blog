@@ -77,7 +77,7 @@ class Mageplaza_BetterBlog_PostController extends Mage_Core_Controller_Front_Act
      */
     protected function _initPost()
     {
-        $postId = $this->getRequest()->getParam('id', 0);
+        $postId = (int)$this->getRequest()->getParam('id', 0);
         $post = Mage::getModel('mageplaza_betterblog/post')
             ->setStoreId(Mage::app()->getStore()->getId())
             ->load($postId);
@@ -188,29 +188,28 @@ class Mageplaza_BetterBlog_PostController extends Mage_Core_Controller_Front_Act
     }
 
     /**
-     * Show welcome msg to reader
-     */
-    public function welcomeAction()
-    {
-
-    }
-
-    /**
      * Submit new comment action
      * @access public
      * @author Sam
      */
     public function commentpostAction()
     {
+        $session = Mage::getSingleton('core/session');
+        if (!$this->_validateFormKey()) {
+            $session->addError($this->__('Invalid form key. Please refresh the page.'));
+            $this->_redirectReferer();
+            return;
+        }
         $data = $this->getRequest()->getPost();
         $post = $this->_initPost();
-        $session = Mage::getSingleton('core/session');
         if ($post) {
             if ($post->getAllowComments()) {
                 if ((Mage::getSingleton('customer/session')->isLoggedIn() ||
                     Mage::getStoreConfigFlag('mageplaza_betterblog/post/allow_guest_comment'))
                 ) {
-                    $comment = Mage::getModel('mageplaza_betterblog/post_comment')->setData($data);
+                    $allowedFields = array('title', 'comment', 'name', 'email');
+                    $filteredData = array_intersect_key($data, array_flip($allowedFields));
+                    $comment = Mage::getModel('mageplaza_betterblog/post_comment')->setData($filteredData);
                     $validate = $comment->validate();
                     if ($validate === true) {
                         try {
